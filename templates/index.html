@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <main class="container">
+        <h1>Password Generator</h1>
+        <form action="/generate" method="POST">
+            <label for="length">Password length:</label>
+            <input id="length" type="number" name="length" min="4" max="50" value="{{ request.form.get('length', '') }}"
+                required>
+
+            <label class="option">
+                <input type="checkbox" name="uppercase" {% if request.form.get('uppercase') %}checked{% endif %}>
+                Uppercase
+            </label>
+            <label class="option">
+                <input type="checkbox" name="numbers" {% if request.form.get('numbers') %}checked{% endif %}> Numbers
+            </label>
+            <label class="option">
+                <input type="checkbox" name="symbols" {% if request.form.get('symbols') %}checked{% endif %}> Symbols
+            </label>
+
+            <button type="submit">Generate Password</button>
+        </form>
+
+        {% if error %}
+        <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {% if password %}
+        <p>Your password:</p>
+        <p class="result" id="password">{{ password }}</p>
+        <button type="button" onclick="copyPassword()">Copy Password</button>
+        <p id="copyMessage" role="status"></p>
+        <p>Strength: <span class="{{ strength|lower }}">{{ strength }}</span></p>
+        {% endif %}
+    </main>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
